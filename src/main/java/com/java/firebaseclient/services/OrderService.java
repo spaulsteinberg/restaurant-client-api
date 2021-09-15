@@ -1,4 +1,4 @@
-package com.java.services;
+package com.java.firebaseclient.services;
 
 import com.models.OrderRequest;
 import org.springframework.stereotype.Service;
@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
     public String sendOrder(OrderRequest orderRequest){
-        return "";
+        return "sent";
     }
 }

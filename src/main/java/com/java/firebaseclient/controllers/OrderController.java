@@ -1,15 +1,16 @@
-package com.java.controllers;
+package com.java.firebaseclient.controllers;
 
 
-import com.java.services.OrderService;
+import com.java.firebaseclient.services.OrderService;
 import com.models.OrderRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.ExecutionException;
 
 @RestController
+@RequestMapping("/api")
+@SuppressWarnings("unused")
 public class OrderController {
 
     private OrderService orderService;
@@ -21,5 +22,10 @@ public class OrderController {
     @PostMapping("/send/order")
     public String sendOrder(@RequestBody OrderRequest orderRequest) throws InterruptedException, ExecutionException {
         return orderService.sendOrder(orderRequest);
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> healthcheck(){
+        return ResponseEntity.ok("Application is running!");
     }
 }
