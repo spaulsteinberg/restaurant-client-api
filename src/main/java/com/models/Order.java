@@ -1,6 +1,15 @@
 package com.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
 public class Order {
-    private FoodItem[] Food;
-    private BeverageItem[] Drink;
+    public List<FoodItem> food;
+    public List<BeverageItem> drink;
+
+    public Order(){}
 }

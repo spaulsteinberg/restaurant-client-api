@@ -1,6 +1,13 @@
 package com.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class FoodAddition {
-    private String Item;
-    private float Price;
+    public String item;
+    public double price;
+
+    public FoodAddition(){}
 }

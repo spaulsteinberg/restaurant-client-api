@@ -1,33 +1,23 @@
 package com.models;
 
-import com.google.type.Date;
+import com.google.cloud.firestore.FieldValue;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class OrderRequest {
-    private String Credit;
-    private Date Date;
-    private String FirstName;
-    private String LastName;
-    private String Email;
-    private float TotalCost;
-    private Order Order;
+    public String credit;
+    private FieldValue date;
+    public String firstName;
+    public String lastName;
+    public String email;
+    public double totalCost;
+    public Order order;
 
-    public OrderRequest(){ }
-    public OrderRequest(String credit, Date date, String firstname, String lastname, String email, float totalcost, Order order){
-        this.Credit = credit;
-        this.Date = date;
-        this.FirstName = firstname;
-        this.LastName = lastname;
-        this.Email = email;
-        this.TotalCost = totalcost;
-        this.Order = order;
+    public void setDate(FieldValue val){
+        this.date = FieldValue.serverTimestamp();
     }
-    public OrderRequest(OrderRequest or){
-        this.Credit = or.Credit;
-        this.Date = or.Date;
-        this.FirstName = or.FirstName;
-        this.LastName = or.LastName;
-        this.Email = or.Email;
-        this.TotalCost = or.TotalCost;
-        this.Order = or.Order;
-    }
+
+    public OrderRequest(){}
 }
