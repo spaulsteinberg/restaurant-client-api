@@ -17,4 +17,10 @@ public class BeverageItem {
     public double price;
 
     public BeverageItem(){}
+
+    public BeverageItem(String category, String item, double price){
+        this.category = category;
+        this.item = item;
+        this.price = price;
+    }
 }

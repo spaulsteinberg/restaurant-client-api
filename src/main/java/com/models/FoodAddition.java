@@ -16,4 +16,9 @@ public class FoodAddition {
     public double price;
 
     public FoodAddition(){}
+
+    public FoodAddition(String item, double price){
+        this.item = item;
+        this.price = price;
+    }
 }

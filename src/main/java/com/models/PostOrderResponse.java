@@ -6,9 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostOrderResponse {
-    private int status;
-    private String message;
-    private String reference;
+    public int status;
+    public String message;
+    public String reference;
+
+    public PostOrderResponse(){}
 
     public PostOrderResponse(int status, String message, String reference){
         this.status = status;

@@ -20,4 +20,18 @@ public class FoodItem {
     public List<String> subtractions;
 
     public FoodItem(){}
+
+    public FoodItem(String category, String main, double price){
+        this.category = category;
+        this.main = main;
+        this.price = price;
+    }
+
+    public FoodItem(String category, String main, double price, List<FoodAddition> additions, List<String> subtractions){
+        this.category = category;
+        this.main = main;
+        this.price = price;
+        this.additions = additions;
+        this.subtractions = subtractions;
+    }
 }
