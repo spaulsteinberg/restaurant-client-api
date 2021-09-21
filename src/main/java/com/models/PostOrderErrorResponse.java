@@ -9,19 +9,22 @@ import java.util.List;
 @Getter
 @Setter
 public class PostOrderErrorResponse {
-    public int code;
+    public int status;
     public String message;
     public List<String> details;
 
+    public PostOrderErrorResponse(){}
+
     public PostOrderErrorResponse(int code, String message){
-        this.code = code;
+        this.status = code;
         this.message = message;
         this.details = new ArrayList<>();
     }
 
     public PostOrderErrorResponse(int code, String message, List<String> details){
-        this.code = code;
+        this.status = code;
         this.message = message;
         this.details = details;
     }
+
 }

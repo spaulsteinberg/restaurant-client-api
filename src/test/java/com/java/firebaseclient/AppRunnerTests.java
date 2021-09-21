@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +46,7 @@ public class AppRunnerTests {
 	void setUp() throws InterruptedException, ExecutionException {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 		Mockito.when(mockOrderService.sendOrder(Mockito.any())).thenReturn(new PostOrderResponse(201, "Created", null));
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 	}
 
 	@Test
@@ -53,8 +55,7 @@ public class AppRunnerTests {
 	}
 
 	@Test
-	void postOrderTest() throws Exception {
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+	void postOrderReturns201Created() throws Exception {
 		String jsonRequest = mapper.writeValueAsString(getValidOrderRequest());
 		MvcResult result = mockMvc
 				.perform(post("/api/v1/client/send/order")
@@ -64,6 +65,28 @@ public class AppRunnerTests {
 		String resultContent = result.getResponse().getContentAsString();
 		PostOrderResponse response = mapper.readValue(resultContent, PostOrderResponse.class);
 		assertThat(response.status).isEqualTo(201);
+	}
+
+	@Test
+	void postOrderReturns400BadRequest() throws Exception {
+		String jsonRequest = mapper.writeValueAsString(getInvalidOrder());
+		MvcResult result = mockMvc
+				.perform(post("/api/v1/client/send/order")
+						.content(jsonRequest)
+						.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
+		String resultContent = result.getResponse().getContentAsString();
+		PostOrderErrorResponse response = mapper.readValue(resultContent, PostOrderErrorResponse.class);
+		assertThat(response.status).isEqualTo(400);
+		assertThat(response.message).isEqualTo("Bad Request");
+	}
+
+	@Test
+	void healthCheckReturns200ok() throws Exception {
+		MvcResult result = mockMvc.perform(get("/api/v1/client/health").accept(MediaType.APPLICATION_JSON))
+					.andExpect(status().isOk()).andReturn();
+		var response = result.getResponse();
+		assertThat(response.getContentAsString()).isEqualTo("Application is running!");
+		assertThat(response.getStatus()).isEqualTo(200);
 	}
 
 	private OrderRequest getValidOrderRequest(){
@@ -90,5 +113,15 @@ public class AppRunnerTests {
 
 	private List<FoodAddition> getAdditions(){
 		return new ArrayList<>(Arrays.asList(new FoodAddition("Onions", 1)));
+	}
+
+	private OrderRequest getInvalidOrder(){
+		OrderRequest or = new OrderRequest();
+		or.firstName = "Sam";
+		or.totalCost = 42.3;
+		or.order = getValidOrder();
+		or.credit = "123456789";
+		// no last name
+		return or;
 	}
 }
