@@ -75,7 +75,7 @@ public class AppRunnerTests {
 						.content(jsonRequest)
 						.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
 		String resultContent = result.getResponse().getContentAsString();
-		PostOrderErrorResponse response = mapper.readValue(resultContent, PostOrderErrorResponse.class);
+		OrderErrorResponse response = mapper.readValue(resultContent, OrderErrorResponse.class);
 		assertThat(response.status).isEqualTo(400);
 		assertThat(response.message).isEqualTo("Bad Request");
 	}

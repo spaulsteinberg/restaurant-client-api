@@ -1,6 +1,7 @@
 package com.models;
 
 import com.google.cloud.firestore.FieldValue;
+import com.google.cloud.firestore.annotation.ServerTimestamp;
 import lombok.Getter;
 import lombok.Setter;
 
