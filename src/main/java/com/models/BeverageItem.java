@@ -15,6 +15,9 @@ public class BeverageItem {
     @NotNull(message = "Price cannot be null.")
     @Min(value = 0, message = "Price cannot be negative")
     public double price;
+    @NotNull(message = "Item quantity cannot be null")
+    @Min(value = 1, message = "Item quantity cannot be less than 1")
+    public int quantity;
 
     public BeverageItem(){}
 

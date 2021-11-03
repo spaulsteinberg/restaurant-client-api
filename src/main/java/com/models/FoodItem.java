@@ -16,21 +16,26 @@ public class FoodItem {
     public String category;
     @NotNull(message = "Item main cannot be null.")
     public String main;
+    @NotNull(message = "Item quantity cannot be null")
+    @Min(value = 1, message = "Item quantity cannot be less than 1")
+    public int quantity;
     public List<FoodAddition> additions;
     public List<String> subtractions;
 
     public FoodItem(){}
 
-    public FoodItem(String category, String main, double price){
+    public FoodItem(String category, String main, double price, int quantity){
         this.category = category;
         this.main = main;
         this.price = price;
+        this.quantity = quantity;
     }
 
-    public FoodItem(String category, String main, double price, List<FoodAddition> additions, List<String> subtractions){
+    public FoodItem(String category, String main, double price, int quantity, List<FoodAddition> additions, List<String> subtractions){
         this.category = category;
         this.main = main;
         this.price = price;
+        this.quantity = quantity;
         this.additions = additions;
         this.subtractions = subtractions;
     }

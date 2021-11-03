@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/v1/client")
+@CrossOrigin
 @SuppressWarnings("unused")
 public class OrderController {
 
@@ -27,14 +28,14 @@ public class OrderController {
 
     @PostMapping(value = "/send/order", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity sendOrder(@Valid @RequestBody OrderRequest orderRequest, BindingResult result) throws InterruptedException, ExecutionException {
-            if (result.hasErrors()){
-                OrderErrorResponse response = new OrderErrorResponse(400, "Bad Request");
-                for (FieldError error: result.getFieldErrors()){
-                    response.details.add(error.getDefaultMessage());
-                }
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        if (result.hasErrors()){
+            OrderErrorResponse response = new OrderErrorResponse(400, "Bad Request");
+            for (FieldError error: result.getFieldErrors()){
+                response.details.add(error.getDefaultMessage());
             }
-           return ResponseEntity.status(HttpStatus.CREATED).body(orderService.sendOrder(orderRequest));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.sendOrder(orderRequest));
     }
 
     @GetMapping(value = "/get/orders", produces = MediaType.APPLICATION_JSON_VALUE)

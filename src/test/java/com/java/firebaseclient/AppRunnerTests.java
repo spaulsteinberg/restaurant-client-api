@@ -103,7 +103,7 @@ public class AppRunnerTests {
 	private Order getValidOrder(){
 		Order or = new Order();
 		BeverageItem bItem = new BeverageItem("Soda", "Sprite", 1.98);
-		FoodItem fItem = new FoodItem("Meat", "Steak", 20.34);
+		FoodItem fItem = new FoodItem("Meat", "Steak", 20.34, 1);
 		fItem.additions = getAdditions();
 		fItem.subtractions = new ArrayList<>(Arrays.asList("Ketchup"));
 		or.drink = new ArrayList<>(Arrays.asList(bItem));
