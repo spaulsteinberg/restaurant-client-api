@@ -22,11 +22,12 @@ public class PaymentsService {
     }
 
     public Charge charge(PostChargeToCardRequest request)throws StripeException {
-        Map<String, Object> chargeParams = new HashMap<String, Object>();
+        Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", request.getAmount());
         chargeParams.put("currency", request.getCurrency());
         chargeParams.put("description", request.getDescription());
         chargeParams.put("source", request.getStripeToken());
+        chargeParams.put("receipt_email", request.getStripeEmail());
         return Charge.create(chargeParams);
     }
 }
