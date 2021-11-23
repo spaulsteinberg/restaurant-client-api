@@ -1,14 +1,13 @@
 package com.java.firebaseclient.services;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.models.*;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -18,10 +17,9 @@ public class OrderService {
     public PostOrderResponse sendOrder(OrderRequest orderRequest) throws ExecutionException, InterruptedException
     {
         Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<DocumentReference> future =
-                db.collection(System.getenv("FS_ORDER_COLLECTION"))
-                        .add(orderRequest);
-        return new PostOrderResponse(201, "Order Created successfully.", future.get().getId());
+        DocumentReference docRef = db.collection(System.getenv("FS_ORDER_COLLECTION")).document();
+        ApiFuture<WriteResult> writeResult = docRef.set(orderRequest);
+        return new PostOrderResponse(201, "Order Created successfully.", docRef.getId(), writeResult.get().getUpdateTime().toDate().toInstant().atZone(ZoneId.of("America/Chicago")));
     }
 
     public GetOrdersResponse getOrders(String firstName, String lastName, String credit) throws ExecutionException, InterruptedException{
