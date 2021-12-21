@@ -1,12 +1,10 @@
 package com.java.firebaseclient.controllers;
 
 
+import com.exceptions.order.OrderDoesNotExistException;
 import com.exceptions.order.OrderNotCreatedException;
 import com.java.firebaseclient.services.OrderService;
-import com.models.OrderRequest;
-import com.models.OrderErrorResponse;
-import com.models.OrderResult;
-import com.models.PostOrderResponse;
+import com.models.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,10 +37,11 @@ public class OrderController {
     }
 
     @GetMapping(value = "/get/orders", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity retrieveOrders(@RequestHeader("credit") String credit, @RequestHeader("firstName") String firstName, @RequestHeader("lastName") String lastName) throws InterruptedException, ExecutionException {
-        if (credit == null || credit.isBlank() || firstName == null || firstName.isBlank() || lastName == null || lastName.isBlank()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new OrderErrorResponse(400, "Bad Request"));
+    public ResponseEntity retrieveOrders(@RequestHeader("reference") String reference) throws InterruptedException, ExecutionException {
+        if (reference == null || reference.isBlank()){
+            throw new OrderDoesNotExistException(String.format("Reference: %s is invalid.", reference));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrders(firstName, lastName, credit));
+
+        return ResponseEntity.status(HttpStatus.OK).body(new GetOrdersResponse(200, orderService.getOrders(reference)));
     }
 }

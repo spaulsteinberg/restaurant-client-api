@@ -11,9 +11,12 @@ import java.util.List;
 public class GetOrdersResponse {
 
     public int status;
-    public List<GetOrderServerResponse> data;
+    public OrderServerResult data;
 
     public GetOrdersResponse(){}
 
-    public GetOrdersResponse(int status){ this.status = status; this.data = new ArrayList<>(); }
+    public GetOrdersResponse(int status, OrderServerResult result){
+        this.status = status;
+        this.data = result;
+    }
 }

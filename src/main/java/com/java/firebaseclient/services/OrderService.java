@@ -1,44 +1,34 @@
 package com.java.firebaseclient.services;
 
+import com.exceptions.order.OrderDoesNotExistException;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import com.java.firebaseclient.repository.OrderRepository;
 import com.models.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.ZoneId;
-import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
-    public OrderResult sendOrder(OrderRequest orderRequest) throws ExecutionException, InterruptedException
+    private final OrderRepository orderRepository;
+
+    public OrderResult sendOrder(OrderRequest request) throws ExecutionException, InterruptedException
     {
-        Firestore db = FirestoreClient.getFirestore();
-        DocumentReference docRef = db.collection(System.getenv("FS_ORDER_COLLECTION")).document();
-        ApiFuture<WriteResult> writeResult = docRef.set(orderRequest);
-        return new OrderResult(docRef.getId(), writeResult.get().getUpdateTime().toDate().toInstant().atZone(ZoneId.of("America/Chicago")));
+        return orderRepository.sendOrder(request);
     }
 
-    public GetOrdersResponse getOrders(String firstName, String lastName, String credit) throws ExecutionException, InterruptedException{
-        Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<QuerySnapshot> future =
-                db.collection(System.getenv("FS_ORDER_COLLECTION"))
-                        .whereEqualTo("credit", credit)
-                        .whereEqualTo("firstName", firstName)
-                        .whereEqualTo("lastName", lastName)
-                        .get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-
-        if (documents.size() == 0){
-            return new GetOrdersResponse(404);
+    public OrderServerResult getOrders(String reference) throws ExecutionException, InterruptedException {
+        DocumentSnapshot document = orderRepository.getOrders(reference);
+        if (document.exists()){
+            return new OrderServerResult(document.getData());
+        } else {
+            throw new OrderDoesNotExistException(String.format("Order for reference %s does not exist.", reference));
         }
-        var response = new GetOrdersResponse(200);
-        for (QueryDocumentSnapshot document: documents){
-            response.data.add(document.toObject(GetOrderServerResponse.class));
-        }
-        return response;
     }
 }
