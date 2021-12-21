@@ -45,9 +45,4 @@ public class OrderController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrders(firstName, lastName, credit));
     }
-
-    @GetMapping("/health")
-    public ResponseEntity<String> healthcheck(){
-        return ResponseEntity.ok("Application is running!");
-    }
 }
