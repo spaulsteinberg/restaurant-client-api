@@ -45,7 +45,7 @@ public class AppRunnerTests {
 	@BeforeEach
 	void setUp() throws InterruptedException, ExecutionException {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		Mockito.when(mockOrderService.sendOrder(Mockito.any())).thenReturn(new PostOrderResponse(201, "Created", null, null));
+		Mockito.when(mockOrderService.sendOrder(Mockito.any())).thenReturn(new OrderResult(null, null));
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 	}
 

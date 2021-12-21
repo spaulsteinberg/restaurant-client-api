@@ -1,9 +1,12 @@
 package com.java.firebaseclient.controllers;
 
 
+import com.exceptions.order.OrderNotCreatedException;
 import com.java.firebaseclient.services.OrderService;
 import com.models.OrderRequest;
 import com.models.OrderErrorResponse;
+import com.models.OrderResult;
+import com.models.PostOrderResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +30,12 @@ public class OrderController {
     }
 
     @PostMapping(value = "/send/order", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity sendOrder(@Valid @RequestBody OrderRequest orderRequest, BindingResult result) throws InterruptedException, ExecutionException {
-        if (result.hasErrors()){
-            OrderErrorResponse response = new OrderErrorResponse(400, "Bad Request");
-            for (FieldError error: result.getFieldErrors()){
-                response.details.add(error.getDefaultMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    public ResponseEntity sendOrder(@Valid @RequestBody OrderRequest orderRequest) throws InterruptedException, ExecutionException {
+        OrderResult result = orderService.sendOrder(orderRequest);
+        if (result.getReference() == null || result.getReference().isBlank()){
+            throw new OrderNotCreatedException("Order was not created.");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.sendOrder(orderRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new PostOrderResponse(201, "Order Created successfully.", result));
     }
 
     @GetMapping(value = "/get/orders", produces = MediaType.APPLICATION_JSON_VALUE)

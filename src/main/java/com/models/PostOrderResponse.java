@@ -22,4 +22,11 @@ public class PostOrderResponse {
         this.reference = reference;
         this.createdAt = createdAt;
     }
+
+    public PostOrderResponse(int status, String message, OrderResult result){
+        this.status = status;
+        this.message = message;
+        this.reference = result.getReference();
+        this.createdAt = result.getCreatedAt();
+    }
 }

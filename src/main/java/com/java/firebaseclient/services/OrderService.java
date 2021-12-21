@@ -14,12 +14,12 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class OrderService {
 
-    public PostOrderResponse sendOrder(OrderRequest orderRequest) throws ExecutionException, InterruptedException
+    public OrderResult sendOrder(OrderRequest orderRequest) throws ExecutionException, InterruptedException
     {
         Firestore db = FirestoreClient.getFirestore();
         DocumentReference docRef = db.collection(System.getenv("FS_ORDER_COLLECTION")).document();
         ApiFuture<WriteResult> writeResult = docRef.set(orderRequest);
-        return new PostOrderResponse(201, "Order Created successfully.", docRef.getId(), writeResult.get().getUpdateTime().toDate().toInstant().atZone(ZoneId.of("America/Chicago")));
+        return new OrderResult(docRef.getId(), writeResult.get().getUpdateTime().toDate().toInstant().atZone(ZoneId.of("America/Chicago")));
     }
 
     public GetOrdersResponse getOrders(String firstName, String lastName, String credit) throws ExecutionException, InterruptedException{

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class BeverageItem {
     public String category;
     @NotNull(message = "Beverage item cannot be null.")
+    @NotBlank(message = "Item cannot be blank.")
     public String item;
     @NotNull(message = "Price cannot be null.")
     @Min(value = 0, message = "Price cannot be negative")
