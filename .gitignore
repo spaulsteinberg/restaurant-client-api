@@ -33,3 +33,4 @@ build/
 .vscode/
 /src/main/resources/serviceAccountKey.json
 /environment.properties
+src/main/resources/environment.properties
