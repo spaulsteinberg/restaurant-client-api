@@ -7,6 +7,8 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +17,12 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/client")
+@Configuration
+@PropertySource("classpath:environment.properties")
 @SuppressWarnings("unused")
 public class PaymentsController {
 
-    @Value("${STRIPE_PUBLIC_KEY}")
+    @Value("${stripe.key.public}")
     private String stripePublicKey;
     @Autowired
     private PaymentsService paymentsService;

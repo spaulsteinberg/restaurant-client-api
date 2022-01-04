@@ -5,6 +5,8 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -12,8 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Configuration
+@PropertySource("classpath:environment.properties")
 public class PaymentsService {
-    @Value("${STRIPE_SECRET_KEY}")
+    @Value("${stripe.key.secret}")
     private String secretKey;
 
     @PostConstruct
