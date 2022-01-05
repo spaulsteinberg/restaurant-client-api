@@ -1,2 +1,2 @@
 # restaurant-client-api
-REST Service for Restaurant Client
+REST Client for [Restaurant Customer](https://github.com/spaulsteinberg/restaurant-customer).
